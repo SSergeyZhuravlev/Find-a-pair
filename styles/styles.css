@@ -11,7 +11,14 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #172050;
+    background-color: #9d9ea4;
+}
+
+.btn-reset {
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
 }
 
 .game-container {
@@ -49,7 +56,7 @@ body {
 
 .card {
     width: calc(25% - 10px);
-    height: 100%;
+    height: calc(25% - 10px);
     margin: 5px;
     position: relative;
     border-radius: 10px;
@@ -64,6 +71,10 @@ body {
 
 .card.flip {
     transform: rotateY(180deg);
+}
+
+.card.success .card__front {
+    background-color: #17db73;
 }
 
 .card__back,
@@ -99,6 +110,11 @@ body {
     opacity: 0;
 }
 
+.card-img {
+    width: 100%;
+    height: 100%;
+}
+
 .start__window {
     position: absolute;
     z-index: 1000;
@@ -115,6 +131,23 @@ body {
     margin-bottom: 80px;
     font-size: 50px;
     color: white;
+}
+
+.select-descr {
+    margin-bottom: 20px;
+    font-size: 20px;
+    color: white;
+}
+
+.form-select {
+    width: 50%;
+    margin-bottom: 20px;
+    padding: 15px 20px;
+    color: white;
+    background-color: #0D1127;
+    border: 3px solid #5978F3;
+    border-radius: 5rem;
+    cursor: pointer;
 }
 
 .input__descr {
@@ -140,6 +173,14 @@ body {
 .vertical-count:hover,
 .horizontal-count:hover {
     background-color: #3852ca;
+}
+
+.end__window__congrats {
+    position: absolute;
+    width: 100%;
+    font-size: 40px;
+    color: white;
+    top: 20%;
 }
 
 .restart__btn {
@@ -181,7 +222,7 @@ body {
     align-items: center;
     width: 500px;
     height: 100vh;
-    background-color: #172050;
+    background-color: #9d9ea4;
     opacity: 0;
     transition: opacity 1s ease-in-out
 }
