@@ -7,7 +7,6 @@ const gameContainer = document.querySelector('.game-container');
 let verticalCount;
 let horizontaCount;
 let timerID;
-let res;
 
 const start = createStartWindow();
 function createStartWindow() {
@@ -108,114 +107,70 @@ function createShuffledArr() {
   return shuffledNumbersArr
 }
 
+let firstCard = null,
+    secondCard = null,
+    openedCards = [];
+
+function openCard(card) {
+  if (firstCard === null && this.open) {
+    firstCard = {class: this, card: card};
+    this.open = false;
+    return
+  }
+
+  if (firstCard !== null && this.open) {
+    secondCard = {class: this, card: card};
+    this.open = false;
+  }
+
+  if (firstCard.class.cardNumber.textContent !== secondCard.class.cardNumber.textContent) {
+    setTimeout(() => {
+      firstCard.card.classList.remove('flip');
+      secondCard.card.classList.remove('flip');
+      firstCard = null;
+      secondCard = null;
+    }, 500)
+  } else {
+    openedCards.push(firstCard, secondCard);
+    firstCard = null;
+    secondCard = null;
+  }
+
+  const cards = document.querySelectorAll('.card');
+  if (openedCards.length === cards.length) {
+    setTimeout(() => {
+      while (gameContainer.firstChild) {
+        gameContainer.removeChild(gameContainer.firstChild);
+        gameContainer.classList.remove('active');
+      }
+    }, 700)
+
+    cards.forEach((elem) => {
+      setTimeout(() => {
+        elem.classList.remove('flip');
+      }, 700)
+    });
+
+    createEndWindow();
+
+    openedCards = [];
+    clearInterval(timerID);
+    timerID = null;
+  }
+}
+
 function createGameField() {
   gameContainer.classList.add('active');
 
   const shuffle = createShuffledArr();
-  let firstCard = null,
-      secondCard = null,
-      openedCards = [];
-
   for (let i = 0; i < shuffle.length; i++) {
     const select = document.querySelector('.form-select');
     if (select.value === 'Цифры') {
-      new CardWithNumber(gameContainer, shuffle[i], function(card) {
-        if (firstCard === null && this.open) {
-          firstCard = {class: this, card: card};
-          this.open = false;
-          return
-        }
-
-        if (firstCard !== null && this.open) {
-          secondCard = {class: this, card: card};
-          this.open = false;
-        }
-
-        if (firstCard.class.cardNumber !== secondCard.class.cardNumber) {
-          setTimeout(() => {
-            firstCard.card.classList.remove('flip');
-            secondCard.card.classList.remove('flip');
-            firstCard = null;
-            secondCard = null;
-          }, 500)
-        } else {
-          openedCards.push(firstCard, secondCard);
-          firstCard = null;
-          secondCard = null;
-        }
-
-        if (openedCards.length === shuffle.length) {
-          setTimeout(() => {
-            while (gameContainer.firstChild) {
-              gameContainer.removeChild(gameContainer.firstChild);
-              gameContainer.classList.remove('active');
-            }
-          }, 700)
-
-          const cards = document.querySelectorAll('.card');
-          cards.forEach((elem) => {
-            setTimeout(() => {
-              elem.classList.remove('flip');
-            }, 700)
-          });
-
-          createEndWindow();
-
-          openedCards = [];
-          clearInterval(timerID);
-          timerID = null;
-        }
-      });
+      new CardWithNumber(gameContainer, shuffle[i], openCard);
     }
 
     if (select.value === 'Картинки') {
-      new CardWithImage(gameContainer, shuffle[i], function(card) {
-        if (firstCard === null && this.open) {
-          firstCard = {class: this, card: card};
-          this.open = false;
-          return
-        }
-
-        if (firstCard !== null && this.open) {
-          secondCard = {class: this, card: card};
-          this.open = false;
-        }
-
-        if (firstCard.class.cardNumber.textContent !== secondCard.class.cardNumber.textContent) {
-          setTimeout(() => {
-            firstCard.card.classList.remove('flip');
-            secondCard.card.classList.remove('flip');
-            firstCard = null;
-            secondCard = null;
-          }, 500)
-        } else {
-          openedCards.push(firstCard, secondCard);
-          firstCard = null;
-          secondCard = null;
-        }
-
-        if (openedCards.length === shuffle.length) {
-          setTimeout(() => {
-            while (gameContainer.firstChild) {
-              gameContainer.removeChild(gameContainer.firstChild);
-              gameContainer.classList.remove('active');
-            }
-          }, 700)
-
-          const cards = document.querySelectorAll('.card');
-          cards.forEach((elem) => {
-            setTimeout(() => {
-              elem.classList.remove('flip');
-            }, 700)
-          });
-
-          createEndWindow();
-
-          openedCards = [];
-          clearInterval(timerID);
-          timerID = null;
-        }
-      });
+      new CardWithImage(gameContainer, shuffle[i], openCard);
     }
   }
 
@@ -269,6 +224,3 @@ function createGameOver() {
       start.startWindow.classList.remove('hidden');
     })
 }
-
-
-

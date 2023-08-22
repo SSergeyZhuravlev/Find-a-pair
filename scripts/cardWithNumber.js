@@ -8,7 +8,9 @@ export class CardWithNumber {
   }
 
   set cardNumber(number) {
-    this._cardNumber = number;
+    const numberSpan = document.createElement('span');
+    numberSpan.textContent = number;
+    this._cardNumber = numberSpan;
   }
 
   get cardNumber() {
